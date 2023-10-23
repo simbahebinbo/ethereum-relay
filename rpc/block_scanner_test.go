@@ -1,15 +1,11 @@
-package main
+package rpc
 
 import (
+	"ethereum-relay/dao"
 	"fmt"
 	"math/big"
 	"testing"
 )
-
-/**
-  作者(Author): 林冠宏 / 指尖下的幽灵
-  Created on : 2018/12/11
-*/
 
 func TestBlockScanner_Start(t *testing.T) {
 	requester := NewETHRPCRequester("https://mainnet.infura.io/v3/2e6d9331f74d472a9d47fe99f697ca2b")

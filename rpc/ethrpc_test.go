@@ -1,7 +1,8 @@
-package main
+package rpc
 
 import (
 	"encoding/json"
+	"ethereum-relay/tool"
 	"fmt"
 	"math/big"
 	"testing"
@@ -23,7 +24,7 @@ func TestNewETHRPCClient(t *testing.T) {
 func Test_GetTransactionByHash(t *testing.T) {
 	nodeUrl := "https://mainnet.infura.io/v3/2e6d9331f74d472a9d47fe99f697ca2b"
 	txHash := "0x53c5b03e392d6aa68a0df26b6d466ae8fbd1c2c5b74f9baae05434ec9a18a282"
-	if txHash == "" || len(txHash) != 66 {
+	if len(txHash) != 66 {
 		// 这里演示，在调用 rpc 接口函数的时候，都要先进行入参的合法性判断
 		fmt.Println("非法交易 hash 值")
 		return
@@ -69,7 +70,7 @@ func Test_GetTransactions(t *testing.T) {
 func Test_GetETHBalance(t *testing.T) {
 	nodeUrl := "https://mainnet.infura.io/v3/2e6d9331f74d472a9d47fe99f697ca2b"
 	address := "0x0D0707963952f2fBA59dD06f2b425ace40b492Fe"
-	if address == "" || len(address) != 42 {
+	if len(address) != 42 {
 		// 这里演示，在调用 rpc 接口函数的时候，都要先进行入参的合法性判断
 		fmt.Println("非法交易 address 值")
 		return

@@ -1,4 +1,4 @@
-package main
+package rpc
 
 import (
 	"math/big"
@@ -19,8 +19,9 @@ func NewNonceManager() *NonceManager {
 		lock: sync.Mutex{}, // 实例化互斥锁
 	}
 }
-//  设置 nonce
-func (n *NonceManager) SetNonce(address string,nonce *big.Int) {
+
+// 设置 nonce
+func (n *NonceManager) SetNonce(address string, nonce *big.Int) {
 	if n.nonceMemCache == nil {
 		n.nonceMemCache = map[string]*big.Int{}
 	}

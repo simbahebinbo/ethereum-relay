@@ -1,15 +1,10 @@
-package main
-
-/**
-  author : LinGuanHong
-  github : https://github.com/af913337456
-  blog   : http://www.cnblogs.com/linguanh
-  time   : 14:49
-*/
+package rpc
 
 import (
 	"encoding/json"
 	"errors"
+	"ethereum-relay/dao"
+	"ethereum-relay/model"
 	"fmt"
 	"math/big"
 	"strings"

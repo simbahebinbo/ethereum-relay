@@ -1,7 +1,9 @@
-package main
+package rpc
 
 import (
 	"errors"
+	"ethereum-relay/model"
+	"ethereum-relay/tool"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
@@ -212,7 +214,7 @@ func (r *ETHRPCRequester) SendTransaction(address string, transaction *types.Tra
 	// 下面调用以太坊的 rpc 接口
 	txHash := ""
 	methodName := "eth_sendRawTransaction"
-	err = r.client.client.Call(&txHash, methodName, common.ToHex(txRlpData))
+	err = r.client.client.Call(&txHash, methodName, common.Bytes2Hex(txRlpData))
 	if err != nil {
 		return "", fmt.Errorf("发送交易失败! %s", err.Error())
 	}
@@ -265,20 +267,22 @@ func (r *ETHRPCRequester) SendETHTransaction(fromStr, toStr, valueStr string, ga
 	data := []byte("")
 
 	// 构建交易结构体
-	transaction := types.NewTransaction(
-		nonce.Uint64(),
-		to,
-		amount,
-		gasLimit,
-		gasPrice_,
-		data)
+	transaction := types.NewTx(&types.LegacyTx{
+		Nonce:    nonce.Uint64(),
+		To:       &to,
+		Value:    amount,
+		Gas:      gasLimit,
+		GasPrice: gasPrice_,
+		Data:     data,
+	})
 
 	return r.SendTransaction(fromStr, transaction)
 }
 
 // 发送 ERC20 代币交易，或称转账 ERC20 代币
 // 参数分别是：
-// 	   交易发起地址，代币合约地址，交易接收地址，代币数量，油费设置，代币的 decimal 值
+//
+//	交易发起地址，代币合约地址，交易接收地址，代币数量，油费设置，代币的 decimal 值
 func (r *ETHRPCRequester) SendERC20Transaction(
 	fromStr, contact, receiver, valueStr string, gasLimit, gasPrice uint64, decimal int) (string, error) {
 

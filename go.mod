@@ -1,4 +1,4 @@
-module ethereum-relay/mod
+module ethereum-relay
 
 go 1.21
 

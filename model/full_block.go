@@ -1,5 +1,7 @@
 package model
 
+import "ethereum-relay/dao"
+
 // 根据文档定义出区块信息的结构体
 type FullBlock struct {
 	Number           string            `json:"number"`

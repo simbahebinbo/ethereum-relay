@@ -1,4 +1,4 @@
-package main
+package rpc
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 )
 
 type ETHRPCClient struct {
-	NodeUrl string       // 代表节点的url链接
-	client  *rpc.Client  // 代表 rpc 客户端实例
+	NodeUrl string      // 代表节点的url链接
+	client  *rpc.Client // 代表 rpc 客户端实例
 }
 
 // NewETHRPCClient 代表的是新建一个 “RPC” 客户端
@@ -15,9 +15,9 @@ type ETHRPCClient struct {
 func NewETHRPCClient(nodeUrl string) *ETHRPCClient {
 	// & 符号代表的是取指针
 	client := &ETHRPCClient{
-		NodeUrl:nodeUrl,
+		NodeUrl: nodeUrl,
 	}
-	client.initRpc()  // 进行初始化 rpc 客户端句柄实体
+	client.initRpc() // 进行初始化 rpc 客户端句柄实体
 	return client
 }
 
@@ -25,10 +25,10 @@ func NewETHRPCClient(nodeUrl string) *ETHRPCClient {
 func (erc *ETHRPCClient) initRpc() {
 	// 使用 go-ethereum 库中的 rpc 库来初始化
 	// DialHTTP 的意思是使用 http 版本的 rpc 实现方式
-	rpcClient,err := rpc.DialHTTP(erc.NodeUrl)
+	rpcClient, err := rpc.DialHTTP(erc.NodeUrl)
 	if err != nil {
 		// 初始化失败，终结程序，并将错误信息显示到控制台上面
-		errInfo := fmt.Errorf("初始化 rpc client 失败%s",err.Error()).Error()
+		errInfo := fmt.Errorf("初始化 rpc client 失败%s", err.Error()).Error()
 		panic(errInfo)
 	}
 	// 初始化成功，将新实例化的 rpc 句柄赋值给我们 ETHRPCClient 结构体里面的
@@ -44,16 +44,3 @@ func (erc *ETHRPCClient) GetRpc() *rpc.Client {
 	}
 	return erc.client
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
