@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"eth-relay/tool"
 	"fmt"
 	"math/big"
 	"testing"

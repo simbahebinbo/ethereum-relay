@@ -1,22 +1,20 @@
 package main
 
 /**
-    author : LinGuanHong
-    github : https://github.com/af913337456
-    blog   : http://www.cnblogs.com/linguanh
-    time   : 14:49
+  author : LinGuanHong
+  github : https://github.com/af913337456
+  blog   : http://www.cnblogs.com/linguanh
+  time   : 14:49
 */
 
 import (
+	"encoding/json"
 	"errors"
-	"eth-relay/dao"
 	"fmt"
 	"math/big"
 	"strings"
-	"time"
-	"encoding/json"
-	"eth-relay/model"
 	"sync"
+	"time"
 )
 
 // 区块扫描者。遍历出区块的交易，方便从交易中解析出数据，做自定义操作
@@ -28,7 +26,7 @@ type BlockScanner struct {
 	lastNumber   *big.Int           // 上一次区块的区块号
 	fork         bool               // 用来监听是否发生了分叉
 	stop         chan bool          // 用来控制是否停止遍历的管道
-	lock 		 sync.Mutex			// 控制并发
+	lock         sync.Mutex         // 控制并发
 }
 
 func NewBlockScanner(requester ETHRPCRequester, mysql dao.MySQLConnector) *BlockScanner {
@@ -36,9 +34,9 @@ func NewBlockScanner(requester ETHRPCRequester, mysql dao.MySQLConnector) *Block
 		ethRequester: requester,
 		mysql:        mysql,
 		lastBlock:    &dao.Block{},
-		fork:		  false,
+		fork:         false,
 		stop:         make(chan bool),
-		lock:		  sync.Mutex{},
+		lock:         sync.Mutex{},
 	}
 }
 
@@ -49,7 +47,7 @@ func (scanner *BlockScanner) Start() error {
 		_, err := scanner.mysql.Db.
 			Desc("create_time").
 			Where("fork = ?", false).
-			Get(scanner.lastBlock )
+			Get(scanner.lastBlock)
 		if err != nil {
 			return err
 		}
@@ -59,26 +57,26 @@ func (scanner *BlockScanner) Start() error {
 			if err != nil {
 				return err
 			}
-			latestBlock,err := scanner.ethRequester.GetBlockInfoByNumber(latestBlockNumber)
+			latestBlock, err := scanner.ethRequester.GetBlockInfoByNumber(latestBlockNumber)
 			if err != nil {
 				return err
 			}
 			if latestBlock.Number == "" {
 				panic(latestBlockNumber.String())
 			}
-			scanner.lastBlock.BlockHash   = latestBlock.Hash
-			scanner.lastBlock.ParentHash  = latestBlock.ParentHash
+			scanner.lastBlock.BlockHash = latestBlock.Hash
+			scanner.lastBlock.ParentHash = latestBlock.ParentHash
 			scanner.lastBlock.BlockNumber = latestBlock.Number
-			scanner.lastBlock.CreateTime  = scanner.hexToTen(latestBlock.Timestamp).Int64()
+			scanner.lastBlock.CreateTime = scanner.hexToTen(latestBlock.Timestamp).Int64()
 			scanner.lastNumber = latestBlockNumber
-		}else{
+		} else {
 			scanner.lastNumber, _ = new(big.Int).SetString(scanner.lastBlock.BlockNumber, 10)
 			// 下面加 1，因为上一次数据库存的是已经遍历完了的
-			scanner.lastNumber.Add(scanner.lastNumber,new(big.Int).SetInt64(1))
+			scanner.lastNumber.Add(scanner.lastNumber, new(big.Int).SetInt64(1))
 		}
 		return nil
 	}
-	if err := init();err != nil {
+	if err := init(); err != nil {
 		return err
 	}
 	execute := func() {
@@ -100,7 +98,7 @@ func (scanner *BlockScanner) Start() error {
 					execute()
 					continue
 				}
-				if err := init();err != nil {
+				if err := init(); err != nil {
 					scanner.log(err.Error())
 					return
 				}
@@ -115,7 +113,7 @@ func (scanner *BlockScanner) Stop() {
 	scanner.stop <- true
 }
 
-func (scanner *BlockScanner) log(args ...interface{})  {
+func (scanner *BlockScanner) log(args ...interface{}) {
 	fmt.Println(args...)
 }
 
@@ -165,7 +163,7 @@ func (scanner *BlockScanner) getForkBlock(parentHash string) (*dao.Block, error)
 	// 数据库没有父区块记录，准备从以太坊接口获取
 	parentFull, err := scanner.retryGetBlockInfoByHash(parentHash)
 	if err != nil {
-		return nil, fmt.Errorf("分叉严重错误，需要重启区块扫描 %s",err.Error())
+		return nil, fmt.Errorf("分叉严重错误，需要重启区块扫描 %s", err.Error())
 	}
 	// 继续递归往上查询，直到在数据库中有它的记录
 	return scanner.getForkBlock(parentFull.ParentHash)
@@ -178,34 +176,34 @@ func (scanner *BlockScanner) hexToTen(hex string) *big.Int {
 }
 
 // 区块号存在，信息获取为空，可能是以太坊网络延时问题，重试策略函数
-func (scanner *BlockScanner) retryGetBlockInfoByNumber(targetNumber *big.Int) (*model.FullBlock,error) {
-	Retry:
-		fullBlock, err := scanner.ethRequester.GetBlockInfoByNumber(targetNumber)
-		if err != nil {
-			errInfo := err.Error()
-			if strings.Contains(errInfo,"empty") {
-				// 区块号存在，信息获取为空，可能是以太坊网络延时问题，直接重试
-				scanner.log("获取区块信息，重试一次.....",targetNumber.String())
-				goto Retry
-			}
-			return nil,err
+func (scanner *BlockScanner) retryGetBlockInfoByNumber(targetNumber *big.Int) (*model.FullBlock, error) {
+Retry:
+	fullBlock, err := scanner.ethRequester.GetBlockInfoByNumber(targetNumber)
+	if err != nil {
+		errInfo := err.Error()
+		if strings.Contains(errInfo, "empty") {
+			// 区块号存在，信息获取为空，可能是以太坊网络延时问题，直接重试
+			scanner.log("获取区块信息，重试一次.....", targetNumber.String())
+			goto Retry
 		}
-	return fullBlock,nil
+		return nil, err
+	}
+	return fullBlock, nil
 }
 
-func (scanner *BlockScanner) retryGetBlockInfoByHash(hash string) (*model.FullBlock,error) {
-	Retry:
-		fullBlock, err := scanner.ethRequester.GetBlockInfoByHash(hash)
-		if err != nil {
-			errInfo := err.Error()
-			if strings.Contains(errInfo,"empty") {
-				// 区块号存在，信息获取为空，可能是以太坊网络延时问题，直接重试
-				scanner.log("获取区块信息，重试一次.....",hash)
-				goto Retry
-			}
-			return nil,err
+func (scanner *BlockScanner) retryGetBlockInfoByHash(hash string) (*model.FullBlock, error) {
+Retry:
+	fullBlock, err := scanner.ethRequester.GetBlockInfoByHash(hash)
+	if err != nil {
+		errInfo := err.Error()
+		if strings.Contains(errInfo, "empty") {
+			// 区块号存在，信息获取为空，可能是以太坊网络延时问题，直接重试
+			scanner.log("获取区块信息，重试一次.....", hash)
+			goto Retry
 		}
-	return fullBlock,nil
+		return nil, err
+	}
+	return fullBlock, nil
 }
 
 // 扫描区块
@@ -224,11 +222,11 @@ func (scanner *BlockScanner) scan() error {
 	// +1 if x >  y
 	if latestNumber.Cmp(scanner.lastNumber) < 0 {
 		// 小，则等待新区块生成
-		Next:
+	Next:
 		for {
 			select {
 			case <-time.After(time.Duration(4 * time.Second)):
-				number,err := scanner.ethRequester.GetLatestBlockNumber()
+				number, err := scanner.ethRequester.GetLatestBlockNumber()
 				if err == nil && number.Cmp(scanner.lastNumber) >= 0 {
 					targetNumber = number
 					break Next
@@ -256,7 +254,7 @@ func (scanner *BlockScanner) scan() error {
 		block.BlockNumber = scanner.hexToTen(fullBlock.Number).String()
 		block.ParentHash = fullBlock.ParentHash
 		block.CreateTime = scanner.hexToTen(fullBlock.Timestamp).Int64()
-		block.BlockHash  = fullBlock.Hash
+		block.BlockHash = fullBlock.Hash
 		block.Fork = false
 		if _, err := tx.Insert(&block); err != nil {
 			tx.Rollback() // 事务回滚
@@ -265,15 +263,15 @@ func (scanner *BlockScanner) scan() error {
 	}
 	// 检查区块是否分叉
 	if scanner.forkCheck(&block) {
-		data,_ := json.Marshal(fullBlock)
-		scanner.log("分叉！",string(data))
+		data, _ := json.Marshal(fullBlock)
+		scanner.log("分叉！", string(data))
 		tx.Commit()
-		scanner.fork = true  // 发生分叉
+		scanner.fork = true // 发生分叉
 		return errors.New("fork check")
 	}
 
 	// 解析区块内数据，读取内部的 “transactions” 交易信息，分析得出各种合约事件
-	scanner.log("scan block start ==> ","number: ", scanner.hexToTen(fullBlock.Number),"hash: ",fullBlock.Hash)
+	scanner.log("scan block start ==> ", "number: ", scanner.hexToTen(fullBlock.Number), "hash: ", fullBlock.Hash)
 	for index, transaction := range fullBlock.Transactions {
 		// 下面的打印操作模拟自定义处理。对于每条 tx，我们是完全可以进一步从里面提取信息的！
 		scanner.log("tx hash ==> ", transaction.Hash)

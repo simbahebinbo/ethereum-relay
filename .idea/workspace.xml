@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ed89c18-7ed8-4133-8a18-fd42a5abdd93" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/26d8c03c-a8ac-49f9-9a6c-43a6b8200093.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/26d8c03c-a8ac-49f9-9a6c-43a6b8200093.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ETH_RPC_Requester.go" beforeDir="false" afterPath="$PROJECT_DIR$/ETH_RPC_Requester.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/block_scanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/block_scanner.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/block_scanner_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/block_scanner_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ethrpc_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/ethrpc_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/full_block.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/full_block.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,9 +141,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="890" />
     <option name="y" value="143" />
@@ -201,20 +209,15 @@
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "/Users/penghuaping/github/my/ethereum-relay",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm"
   }
 }]]></component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunManager" selected="Go 测试.TestBlockScanner_Start in block_scanner_test.go">
     <configuration name="TestBlockScanner_Start in block_scanner_test.go" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true">

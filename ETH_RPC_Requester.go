@@ -2,15 +2,13 @@ package main
 
 import (
 	"errors"
-	"eth-relay/model"
-	"eth-relay/tool"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/ethereum/go-ethereum/common/hexutil"
 	"math/big"
 )
 
@@ -332,7 +330,7 @@ func (r *ETHRPCRequester) GetLatestBlockNumber() (*big.Int, error) {
 	if err != nil {
 		return nil, fmt.Errorf("获取最新区块号失败! %s", err.Error())
 	}
-	ten,_ := new(big.Int).SetString(number[2:],16)
+	ten, _ := new(big.Int).SetString(number[2:], 16)
 	return ten, nil
 }
 
@@ -348,7 +346,7 @@ func (r *ETHRPCRequester) GetBlockInfoByNumber(blockNumber *big.Int) (*model.Ful
 		return nil, fmt.Errorf("get block info failed! %s", err.Error())
 	}
 	if fullBlock.Number == "" {
-		return nil, fmt.Errorf("block info is empty %s",blockNumber.String())
+		return nil, fmt.Errorf("block info is empty %s", blockNumber.String())
 	}
 	return &fullBlock, nil
 }
@@ -364,7 +362,7 @@ func (r *ETHRPCRequester) GetBlockInfoByHash(blockHash string) (*model.FullBlock
 		return nil, fmt.Errorf("get block info failed! %s", err.Error())
 	}
 	if fullBlock.Number == "" {
-		return nil, fmt.Errorf("block info is empty %s",blockHash)
+		return nil, fmt.Errorf("block info is empty %s", blockHash)
 	}
 	return &fullBlock, nil
 }

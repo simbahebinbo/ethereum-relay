@@ -1,10 +1,9 @@
 package main
 
 import (
-	"eth-relay/dao"
-	"testing"
 	"fmt"
 	"math/big"
+	"testing"
 )
 
 /**
@@ -37,7 +36,7 @@ func TestBlockScanner_Start(t *testing.T) {
 }
 
 func TestName2(t *testing.T) {
-	fmt.Println(new(big.Int).SetString("68d5bc",16))
+	fmt.Println(new(big.Int).SetString("68d5bc", 16))
 }
 
 type Obj struct {
@@ -46,9 +45,9 @@ type Obj struct {
 
 func TestPoint(t *testing.T) {
 	o := &Obj{}
-	o.T = dao.Block{BlockNumber:"456"}
+	o.T = dao.Block{BlockNumber: "456"}
 	fmt.Println(o.T.BlockNumber)
-	new := &dao.Block{BlockNumber:"123"}
+	new := &dao.Block{BlockNumber: "123"}
 	o.a(new)
 	fmt.Println(o.T.BlockNumber)
 }
@@ -56,6 +55,3 @@ func TestPoint(t *testing.T) {
 func (o *Obj) a(block *dao.Block) {
 	o.T = *block
 }
-
-
-

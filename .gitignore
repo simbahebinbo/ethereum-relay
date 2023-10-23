@@ -2,7 +2,7 @@ build/
 .idea/
 Makefile
 Untitled*
-eth-relay
+ethereum-relay
 dump.rdb
 *.bin
 */target
