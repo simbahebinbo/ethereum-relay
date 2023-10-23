@@ -3,8 +3,9 @@ package dao
 import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/xorm-io/core"
+	"github.com/xorm-io/xorm"
 	"time"
-	"xorm.io/xorm"
 )
 
 // MySQL 链接结构体
